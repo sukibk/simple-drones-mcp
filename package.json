@@ -21,14 +21,18 @@
   "author": "Marko Sudar",
   "license": "MIT",
   "dependencies": {
+    "@ai-sdk/openai": "^1.3.22",
     "@modelcontextprotocol/sdk": "^1.11.1",
     "dotenv": "^16.5.0",
     "fastmcp": "^1.27.4",
     "file-type": "^16.5.3",
-    "pg": "^8.15.6"
+    "pg": "^8.16.0",
+    "spinai": "^2.0.16",
+    "spinai-mcp": "^1.0.6"
   },
   "devDependencies": {
     "@types/node": "^22.15.17",
+    "@types/pg": "^8.15.1",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
