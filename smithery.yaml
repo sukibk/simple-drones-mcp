@@ -1,3 +1,18 @@
 version: 1
-start:
-  command: ["node", "dist/index.js"]
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties: {}
+  commandFunction: |
+    (config) => ({
+      command: "node",
+      args: ["dist/index.js"],
+      env: {
+        PG_HOST: "host.docker.internal",
+        PG_PORT: "5432",
+        PG_USER: "postgres",
+        PG_PASSWORD: "TenisMS1!",     // or reference from config if exposed
+        PG_DATABASE: "drone_db"
+      }
+    })
