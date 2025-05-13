@@ -5,12 +5,12 @@ import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import path from "path";
 
-// Resolve __dirname in ESM
+// ESM-compatible __dirname resolution
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
-// Setup PostgreSQL client
+// PostgreSQL connection
 const pgClient = new Client({
   host: process.env.PG_HOST || "localhost",
   port: parseInt(process.env.PG_PORT || "5432"),
@@ -21,11 +21,13 @@ const pgClient = new Client({
 
 await pgClient.connect();
 
+// Create FastMCP server
 const server = new FastMCP({
   name: "Drone MCP Server",
   version: "1.0.0",
 });
 
+// Define tool
 server.addTool({
   name: "list_all_drones",
   description: "Fetch all drones from the database",
@@ -46,7 +48,6 @@ server.addTool({
     values.push(limit);
 
     const res = await pgClient.query(query, values);
-
     return {
       type: "text",
       text: JSON.stringify(res.rows, null, 2),
@@ -54,4 +55,13 @@ server.addTool({
   },
 });
 
-server.start({ transportType: "stdio" }); // Or { transportType: "http", port: 8000 } if using HTTP
+// Start HTTP server
+server.start({
+  transportType: "httpStream",
+  httpStream: {
+    endpoint: "/mcp",
+    port: 8000,
+  },
+});
+
+console.log("✅ HTTP MCP server running on http://localhost:8000/mcp");
